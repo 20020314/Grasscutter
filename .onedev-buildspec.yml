@@ -1,0 +1,20 @@
+version: 18
+jobs:
+- name: 同步→GITEA
+  steps:
+  - !PushRepository
+    name: 同步
+    remoteUrl: https://code.elysia.li/20020314/Grasscutter.git
+    userName: '20020314'
+    passwordSecret: TOKEN
+    withLfs: true
+    force: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  cpuRequirement: 250
+  memoryRequirement: 256
+  timeout: 3600
