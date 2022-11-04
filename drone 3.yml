@@ -1,0 +1,54 @@
+kind: pipeline
+type: docker
+name: Build
+clone:
+  disable: true
+steps:
+- name: 拉取代码
+  image: alpine
+  environment:
+    GIT:
+      from_secret: GIT-HOST
+  volumes:
+  - name: cache
+    path: /work
+  commands:
+  - apk add git
+  - cd /work
+  - git clone https://$GIT/20020314/Alice-LiveMan.git
+- name: 编译JAR文件
+  image: liumiaocn/maven:latest
+  volumes:
+  - name: cache
+    path: /work
+  commands:
+  - cd /work/Alice-LiveMan
+  - mvn clean package
+  - mv target/liveman-0.0.1-SNAPSHOT.jar /work/Alice-LiveMan
+- name: 自动构建镜像
+  image: chaikair/dockeri:latest
+  volumes:
+  - name: cache
+    path: /work
+  - name: docker
+    path: /var/run/docker.sock
+  commands:
+  - cd /work/Alice-LiveMan
+  - docker build -t chaikair/alice:server .
+  - docker login -u chaikair -p $P
+  - docker push chaikair/alice:server
+  environment:
+    P:
+      from_secret: HUB-P
+- name: 推送构建信息
+  image: hongzhuangxian/pushdeer-drone-plugin
+  settings:
+    pushkey: PDU1TXWOAgjLH9GomOxzeNUTvjb3j3GC6DwDE
+    url: https://deer.elysia.li/message/push
+    type: text
+volumes:
+- name: cache
+  temp: {}
+- name: docker
+  host:
+    path: /var/run/docker.sock
