@@ -10,8 +10,22 @@ jobs:
     withLfs: true
     force: true
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  triggers:
-  - !BranchUpdateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  cpuRequirement: 250
+  memoryRequirement: 256
+  timeout: 3600
+- name: 同步→GITHUB
+  steps:
+  - !PushRepository
+    name: 同步
+    remoteUrl: https://github.com/20020314/Grasscutter
+    userName: '20020314'
+    passwordSecret: GITHUB
+    withLfs: false
+    force: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
