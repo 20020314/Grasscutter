@@ -1,25 +1,10 @@
 kind: pipeline
 type: kubernetes
 name: Build
-# resource requests are defined on the pipeline level
-resources:
-  requests:
-    cpu: 2000
-    memory: 500MiB
 steps:
 - name: 编译JAR
   image: gradle:6.9.3-jdk17-alpine
-    resources:
-      # resource limits are defined for each step
-      limits:
-        cpu: 1000
-        memory: 1000MiB
   commands:
   - chmod +x gradlew
   - ./gradlew jar
 
-# resource limits are defined for each step
-    resources:
-      limits:
-        cpu: 1000
-        memory: 500MiB
