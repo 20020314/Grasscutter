@@ -1,7 +1,11 @@
 kind: pipeline
 type: kubernetes
 name: Build
-
+# resource requests are defined on the pipeline level
+resources:
+  requests:
+    cpu: 2000
+    memory: 500MiB
 steps:
 - name: 编译JAR
   image: gradle:6.9.3-jdk17-alpine
