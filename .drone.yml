@@ -1,0 +1,10 @@
+kind: pipeline
+type: kubernetes
+name: Build
+
+steps:
+- name: 编译JAR
+  image: gradle:6.9.3-jdk17-alpine
+  commands:
+  - chmod +x gradlew
+  - ./gradlew jar
