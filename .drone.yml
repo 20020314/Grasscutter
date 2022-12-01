@@ -8,8 +8,9 @@ steps:
   commands:
   - chmod +x gradlew
   - ./gradlew jar
+
+# resource limits are defined for each step
     resources:
-      # resource limits are defined for each step
       limits:
         cpu: 1000
         memory: 500MiB
