@@ -9,7 +9,6 @@ steps:
   commands:
   - chmod +x gradlew
   - ./gradlew jar
-steps:
 - name: 上传s3
   image: plugins/s3
   settings:
