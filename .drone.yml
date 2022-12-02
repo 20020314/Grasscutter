@@ -9,4 +9,13 @@ steps:
   commands:
   - chmod +x gradlew
   - ./gradlew jar
-
+steps:
+- name: 上传s3
+  image: plugins/s3
+  settings:
+    endpoint: https://oss.elysia.li
+    bucket: update
+    access_key: 2WrcmxFUECnFwmDP
+    secret_key: 0gdHyPuD02QxXFrWzasdLsCZXJhDxo7l
+    source: grasscutter-1.4.3-dev.jar
+    target: /jar/
